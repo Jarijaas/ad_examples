@@ -289,13 +289,15 @@ class CompactDescriber(InstancesDescriber):
     reduces false positives by excluding negative examples while always
     including positive examples.
     """
-    def __init__(self, x, y, model, opts, sample_negative=False):
+    def __init__(self, x, y, model, meta, opts, sample_negative=False):
         InstancesDescriber.__init__(self, x, y, model, opts, sample_negative)
 
         self.prec_threshold = 0.4
         self.neg_penalty = 1.0
 
-        self.meta = get_feature_meta_default(x, y)
+        self.meta = meta
+        if self.meta is None:
+            self.meta = get_feature_meta_default(x, y)
 
         # will be used to compute volumes
         self.feature_ranges = get_sample_feature_ranges(self.x)
